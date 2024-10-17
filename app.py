@@ -48,5 +48,9 @@ def add_course():
         return redirect(url_for('index'))
     return render_template('add_course.html', teachers=teachers)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+from sqlalchemy import inspect
+
+with app.app_context():
+    inspector = inspect(db.engine)
+    if not inspector.has_table('student'):  # Проверяем наличие таблицы 'student'
+        db.create_all()
